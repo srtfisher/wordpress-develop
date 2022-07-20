@@ -609,9 +609,7 @@ class WP_Http {
 	 *                        A WP_Error instance upon error.
 	 */
 	public function post( $url, $args = array() ) {
-		$defaults    = array( 'method' => 'POST' );
-		$parsed_args = wp_parse_args( $args, $defaults );
-		return $this->request( $url, $parsed_args );
+		return $this->normalize_request_args( $url, $args, 'post' );
 	}
 
 	/**
@@ -621,15 +619,13 @@ class WP_Http {
 	 *
 	 * @since 2.7.0
 	 *
-	 * @param string       $url  The request URL.
+	 * @param string|array $url  The request URL or array of remote requests that will be run in parallel.
 	 * @param string|array $args Optional. Override the defaults.
 	 * @return array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'.
 	 *                        A WP_Error instance upon error.
 	 */
 	public function get( $url, $args = array() ) {
-		$defaults    = array( 'method' => 'GET' );
-		$parsed_args = wp_parse_args( $args, $defaults );
-		return $this->request( $url, $parsed_args );
+		return $this->normalize_request_args( $url, $args, 'get' );
 	}
 
 	/**
@@ -645,8 +641,46 @@ class WP_Http {
 	 *                        A WP_Error instance upon error.
 	 */
 	public function head( $url, $args = array() ) {
-		$defaults    = array( 'method' => 'HEAD' );
+		return $this->normalize_request_args( $url, $args, 'head' );
+	}
+
+	/**
+	 * Normalize the request arguments for a GET, HEAD, or POST request.
+	 *
+	 * @param string|array $url    The request URL or array of remote requests that will be run in parallel.
+	 * @param string|array $args   Request arguments, optional. Override the defaults.
+	 * @param string       $method Request method to make.
+	 * @return array Array containing 'headers', 'body', 'response', 'cookies', 'filename'.
+	 *               A WP_Error instance upon error.
+	 */
+	protected function normalize_request_args( $url, $args, $method ) {
+		$defaults = array( 'method' => $method );
+
+		if ( is_array( $url ) ) {
+			$parsed_requests = array();
+
+			if ( ! empty( $args ) ) {
+				_doing_it_wrong(
+					__FUNCTION__,
+					__( 'Arguments passed to the second $args paramater are ignored when $url is an array of parallel requests.' ),
+					'6.0.0'
+				);
+			}
+
+			foreach ( $url as $i => $request ) {
+				list( $request_url, $request_args ) = $request;
+
+				$parsed_requests[ $i ] = array(
+					$request_url,
+					wp_parse_args( $request_args, $defaults ),
+				);
+			}
+
+			return $this->request( $parsed_requests );
+		}
+
 		$parsed_args = wp_parse_args( $args, $defaults );
+
 		return $this->request( $url, $parsed_args );
 	}
 
