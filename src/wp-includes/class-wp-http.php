@@ -656,6 +656,7 @@ class WP_Http {
 	protected function normalize_request_args( $url, $args, $method ) {
 		$defaults = array( 'method' => $method );
 
+		// Support an array of parallel requests.
 		if ( is_array( $url ) ) {
 			$parsed_requests = array();
 
@@ -668,6 +669,11 @@ class WP_Http {
 			}
 
 			foreach ( $url as $i => $request ) {
+				// Support an array of string URLs.
+				if ( ! is_array( $request ) ) {
+					$request = array( $request, array() );
+				}
+
 				list( $request_url, $request_args ) = $request;
 
 				$parsed_requests[ $i ] = array(
