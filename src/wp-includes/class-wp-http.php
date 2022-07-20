@@ -662,7 +662,7 @@ class WP_Http {
 			if ( ! empty( $args ) ) {
 				_doing_it_wrong(
 					__FUNCTION__,
-					__( 'Arguments passed to the second $args paramater are ignored when $url is an array of parallel requests.' ),
+					__( 'Arguments passed to the second $args parameter are ignored when $url is an array of parallel requests.' ),
 					'6.0.0'
 				);
 			}
