@@ -609,7 +609,7 @@ class WP_Http {
 	 *                        A WP_Error instance upon error.
 	 */
 	public function post( $url, $args = array() ) {
-		return $this->normalize_request_args( $url, $args, 'post' );
+		return $this->normalize_request_args( $url, $args, 'POST' );
 	}
 
 	/**
@@ -625,7 +625,7 @@ class WP_Http {
 	 *                        A WP_Error instance upon error.
 	 */
 	public function get( $url, $args = array() ) {
-		return $this->normalize_request_args( $url, $args, 'get' );
+		return $this->normalize_request_args( $url, $args, 'GET' );
 	}
 
 	/**
@@ -641,7 +641,7 @@ class WP_Http {
 	 *                        A WP_Error instance upon error.
 	 */
 	public function head( $url, $args = array() ) {
-		return $this->normalize_request_args( $url, $args, 'head' );
+		return $this->normalize_request_args( $url, $args, 'HEAD' );
 	}
 
 	/**
