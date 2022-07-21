@@ -181,6 +181,10 @@ class WP_Http {
 
 				reset_mbstring_encoding();
 
+				if ( is_wp_error( $raw_responses ) ) {
+					return $raw_responses;
+				}
+
 				foreach ( $pending_requests as $index => $request ) {
 					$responses[ $index ] = $this->format_response(
 						$raw_responses[ $index ],
