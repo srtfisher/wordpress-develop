@@ -143,7 +143,7 @@ class WP_Http {
 	 *     @type int          $limit_response_size Size in bytes to limit the response to. Default null.
 	 *
 	 * }
-	 * @return array|WP_Error Array containing 'headers', 'body', 'response', 'cookies', 'filename'.
+	 * @return array|WP_Error Array or array of arrays containing 'headers', 'body', 'response', 'cookies', 'filename'.
 	 *                        A WP_Error instance upon error.
 	 */
 	public function request( $url, $args = array() ) {
@@ -159,15 +159,10 @@ class WP_Http {
 
 				$request = $this->format_request( $request[0], isset( $request[1] ) ? $request[1] : array() );
 
-				// Handle an error in the pre-request step.
-				if ( is_wp_error( $request ) ) {
-					$responses[ $index ] = $request;
-					continue;
-				}
-
-				// Allow the request to be circumvented if the response was short-circuit'd.
-				if ( isset( $request['response'] ) ) {
-					$responses[ $index ] = $request['response'];
+				// Handle an error in the pre-request step. Also allow the request to be
+				// circumvented if the response was short-circuit'd.
+				if ( is_wp_error( $request ) || isset( $request['response'] ) ) {
+					$responses[ $index ] = isset( $request['response'] ) ? $request['response'] : $request;
 					continue;
 				}
 
@@ -203,7 +198,7 @@ class WP_Http {
 		// Handle an error in the pre-request step. Also allow the request to be
 		// circumvented if the response was short-circuit'd.
 		if ( is_wp_error( $formatted ) || isset( $formatted['response'] ) ) {
-			return $formatted;
+			return isset( $formatted['response'] ) ? $formatted['response'] : $formatted;
 		}
 
 		// Avoid issues where mbstring.func_overload is enabled.
