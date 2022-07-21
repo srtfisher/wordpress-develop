@@ -513,5 +513,35 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 		$this->assertNotWPError( $res );
 	}
 
+	/**
+	 * Test parallel requests.
+	 *
+	 * @ticket 33055
+	 * @covers ::wp_remote_request
+	 */
+	public function test_parallel_request() {
+		$responses = wp_remote_request(
+			array(
+				'https://wordpress.org/',
+				array(
+					$this->redirection_script . '?code=301&rt=' . 5,
+					array(
+						'method'      => 'POST',
+						'redirection' => 0,
+					),
+				),
+			),
+		);
 
+		list( $request_wp, $request_redirect ) = $responses;
+
+		$this->skipTestOnTimeout( $request_wp );
+		$this->skipTestOnTimeout( $request_redirect );
+
+		$this->assertNotWPError( $request_wp );
+		$this->assertNotWPError( $request_redirect );
+
+		$this->assertSame( 200, wp_remote_retrieve_response_code( $request_wp ) );
+		$this->assertSame( 301, wp_remote_retrieve_response_code( $request_redirect ) );
+	}
 }
