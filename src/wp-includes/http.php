@@ -35,7 +35,7 @@ function _wp_http_get_object() {
  * @since 3.6.0
  *
  * @see wp_remote_request() For more information on the response array format.
- * @see WP_Http::request() For default arguments information.
+ * @see WP_Http::format_request() For default arguments information.
  *
  * @param string $url  URL to retrieve.
  * @param array  $args Optional. Request arguments. Default empty array.
@@ -77,7 +77,7 @@ function wp_safe_remote_get( $url, $args = array() ) {
  * @since 3.6.0
  *
  * @see wp_remote_request() For more information on the response array format.
- * @see WP_Http::request() For default arguments information.
+ * @see WP_Http::format_request() For default arguments information.
  *
  * @param string $url  URL to retrieve.
  * @param array  $args Optional. Request arguments. Default empty array.
@@ -121,7 +121,7 @@ function wp_safe_remote_head( $url, $args = array() ) {
  *
  * @since 2.7.0
  *
- * @see WP_Http::request() For information on default arguments.
+ * @see WP_Http::format_request() For information on default arguments.
  *
  * @param string|array $url  URL to retrieve or array of remote requests that will be run in parallel.
  * @param array        $args Optional. Request arguments. Default empty array.
@@ -168,7 +168,7 @@ function wp_remote_get( $url, $args = array() ) {
  * @since 2.7.0
  *
  * @see wp_remote_request() For more information on the response array format.
- * @see WP_Http::request() For default arguments information.
+ * @see WP_Http::format_request() For default arguments information.
  *
  * @param string|array $url  URL to retrieve or array of remote requests that will be run in parallel.
  * @param array        $args Optional. Request arguments. Default empty array.
@@ -185,7 +185,7 @@ function wp_remote_post( $url, $args = array() ) {
  * @since 2.7.0
  *
  * @see wp_remote_request() For more information on the response array format.
- * @see WP_Http::request() For default arguments information.
+ * @see WP_Http::format_request() For default arguments information.
  *
  * @param string|array $url  URL to retrieve or array of remote requests that will be run in parallel.
  * @param array        $args Optional. Request arguments. Default empty array.
